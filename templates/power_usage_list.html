@@ -1,0 +1,17 @@
+<h2>전력 사용 이력</h2>
+<table border="1">
+    <tr>
+        <th>시간</th>
+        <th>실시간 전력(W)</th>
+        <th>누적 전력(kWh)</th>
+        <th>전원 상태</th>
+    </tr>
+    {% for log in logs %}
+    <tr>
+        <td>{{ log.timestamp }}</td>
+        <td>{{ log.watt }}</td>
+        <td>{{ log.energy_kwh }}</td>
+        <td>{{ log.is_power_on|yesno:"ON,OFF" }}</td>
+    </tr>
+    {% endfor %}
+</table>

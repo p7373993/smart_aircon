@@ -1,0 +1,15 @@
+<h2>온습도 기록</h2>
+<table border="1">
+    <tr>
+        <th>시간</th>
+        <th>온도(°C)</th>
+        <th>습도(%)</th>
+    </tr>
+    {% for log in logs %}
+    <tr>
+        <td>{{ log.timestamp }}</td>
+        <td>{{ log.temperature }}</td>
+        <td>{{ log.humidity }}</td>
+    </tr>
+    {% endfor %}
+</table>
