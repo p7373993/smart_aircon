@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io, base64
+from django.utils.timezone import localtime
 
 # 한글 폰트 설정
 plt.rc('font', family='NanumGothic')
@@ -14,7 +15,7 @@ plt.rcParams['axes.unicode_minus'] = False  # 마이너스 깨짐 방지
 
 def airconlog_chart(request):
     logs = AirconLog.objects.order_by('timestamp')[:100]
-    times = [log.timestamp.strftime('%H:%M') for log in logs]
+    times = [localtime(log.timestamp).strftime('%H:%M') for log in logs]
     temps = [log.temperature for log in logs]
     hums = [log.humidity for log in logs]
 
@@ -99,4 +100,4 @@ def power_usage_chart(request):
     return render(request, 'power_usage_chart.html', {'chart': img_base64})
 
 def home(request):
-    return HttpResponse("스마트 에어컨 시스템에 오신 것을 환영합니다!")
+    return render(request, 'main.html')

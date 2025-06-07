@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+8lj3n7w5cas7+!g2=9c+!+^h@bq#-v^@9!0!8gxvv2f1kvupo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.0.190", "localhost","127.0.0.1","sungwoo.tplinkdns.com"]
 
 
 # Application definition
@@ -74,12 +74,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'smart_aircon',
+#         'USER': 'airconuser',
+#         'PASSWORD': '0000',  # 위에서 설정한 비밀번호
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'smart_aircon',
-        'USER': 'airconuser',
-        'PASSWORD': '0000',  # 위에서 설정한 비밀번호
+        'NAME': 'aircon',
+        'USER': 'root',
+        'PASSWORD': '0000',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -108,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -121,6 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
