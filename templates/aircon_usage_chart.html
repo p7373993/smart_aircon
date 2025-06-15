@@ -2,9 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
-    <title>온습도 변화 그래프</title>
+    <title>에어컨 사용량 그래프</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <style>
         body {
             background: linear-gradient(135deg, #e0e7ff, #fbc2eb, #fcb69f);
@@ -13,7 +12,7 @@
             margin: 0;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 40px auto;
             background: #fff8;
             border-radius: 28px;
@@ -50,23 +49,24 @@
         .chart-area {
             text-align: center;
         }
-        .chart-area img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
         @media (max-width: 600px) {
             .container { padding: 20px 5px; }
             h2 { font-size: 1.3rem; }
         }
+        .chart-area img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <a href="/" class="home-btn">🏠 홈으로</a>
-        <h2>온습도 변화 그래프</h2>
-        <div class="desc">최근 100개의 온도 및 습도 데이터를 시간대별로 시각화한 그래프입니다.</div>
+        <h2>에어컨 하루 사용량 (30분 단위)</h2>
+        <div class="desc">파란색: 켜짐 시간(분)<br>하루를 30분 단위로 나눠 각 구간에서 에어컨이 켜져 있던 총 시간을 보여줍니다.</div>
         <div class="chart-area">
             {% if chart %}
                 <img src="data:image/png;base64,{{ chart }}">

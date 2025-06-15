@@ -1,13 +1,518 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>Main Page</title>
+    <meta charset="UTF-8" />
+    <title>스마트 에어컨 메인 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0e7ff, #fbc2eb, #fcb69f);
+            min-height: 100vh;
+            font-family: 'Pretendard', 'Montserrat', sans-serif;
+            margin: 0;
+        }
+        .chart-links {
+            margin: 30px auto 0 auto;
+            max-width: 600px;
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+        }
+        .chart-link {
+            background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+            color: #fff;
+            padding: 18px 32px;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 18px #a18cd188;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .chart-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px #fbc2eb88;
+        }
+        .dashboard {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff8;
+            border-radius: 28px;
+            box-shadow: 0 8px 32px #a18cd155;
+            padding: 40px 32px;
+        }
+        .dashboard h1 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #3b3b3b;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+        .dashboard .desc {
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .status-row {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .status-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px #d1d1d1aa;
+            padding: 24px 32px;
+            min-width: 180px;
+            text-align: center;
+        }
+        .status-card .label {
+            color: #888;
+            font-size: 0.92rem;
+        }
+        .status-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 8px 0 4px 0;
+        }
+        .ac-control {
+            margin: 0 auto 20px auto;
+            max-width: 340px;
+            background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+            border-radius: 18px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 4px 18px #a18cd155;
+        }
+        .ac-control h2 {
+            margin-bottom: 18px;
+            color: #fff;
+        }
+        .ac-btn {
+            padding: 16px 36px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 12px;
+            color: #fff;
+            background: linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%);
+            box-shadow: 0 2px 12px #fbc2eb55;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .ac-btn:hover {
+            background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+            transform: scale(1.04);
+        }
+
+        /* 자동 제어 설정 패널 */
+        .auto-control-panel {
+            margin: 30px auto;
+            max-width: 700px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 6px 24px #a18cd133;
+        }
+        .auto-control-panel h2 {
+            color: #333;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 1.6rem;
+        }
+        .setting-group {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            border-left: 4px solid #a18cd1;
+        }
+        .setting-group h3 {
+            margin: 0 0 16px 0;
+            color: #555;
+            font-size: 1.1rem;
+        }
+        .setting-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .setting-row label {
+            min-width: 120px;
+            font-weight: 500;
+            color: #666;
+        }
+        .setting-row input, .setting-row select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .setting-row input:focus, .setting-row select:focus {
+            outline: none;
+            border-color: #a18cd1;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+            z-index: 1;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+            z-index: 0;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-switch input:checked + .slider {
+            background-color: #a18cd1;
+        }
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        .slider:hover {
+            background-color: #bbb;
+        }
+        .toggle-switch input:checked + .slider:hover {
+            background-color: #9179c4;
+        }
+        .save-btn {
+            background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 24px auto 0;
+            box-shadow: 0 4px 16px #a18cd144;
+            transition: transform 0.2s;
+        }
+        .save-btn:hover {
+            transform: scale(1.05);
+        }
+        .auto-control-status {
+            margin: 20px auto;
+            max-width: 700px;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .auto-control-status.enabled {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .auto-control-status.disabled {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .manual-trigger-btn {
+            background: linear-gradient(90deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 16px auto;
+            display: block;
+            transition: transform 0.2s;
+        }
+        .manual-trigger-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 모바일 대응 미디어 쿼리 */
+        @media (max-width: 600px) {
+            .dashboard, .auto-control-panel {
+                padding: 20px 16px;
+            }
+            .status-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .status-card {
+                min-width: unset;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .ac-control {
+                padding: 18px 16px;
+            }
+            .chart-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .setting-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .setting-row label {
+                min-width: unset;
+                margin-bottom: 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>메인 페이지</h1>
-    <ul>
-        <li><a href="/power_chart/">전력 사용량 그래프</a></li>
-        <li><a href="/airconlog_chart/">온습도 변화 그래프</a></li>
-    </ul>
+    <!-- 차트 바로가기 링크 -->
+    <div class="chart-links">
+        <a href="/aircon_usage_chart/" class="chart-link">에어컨 사용량 그래프</a>
+        <a href="/airconlog_chart/" class="chart-link">온습도 변화 그래프</a>
+    </div>
+
+    <!-- 대시보드 -->
+    <div class="dashboard">
+        <h1>스마트 에어컨 제어 시스템</h1>
+        <div class="desc">라즈베리파이 기반 지능형 에어컨 자동 제어 및 에너지 관리</div>
+
+        <!-- 실시간 상태 -->
+        <div class="status-row">
+            <div class="status-card">
+                <div class="label">실내 온도</div>
+                <div class="value" id="current-temp">{{ current_temp }}°C</div>
+            </div>
+            <div class="status-card">
+                <div class="label">습도</div>
+                <div class="value" id="current-humidity">{{ current_humidity }}%</div>
+            </div>
+            <div class="status-card">
+                <div class="label">에어컨 상태</div>
+                <div class="value" id="ac-status">{{ ac_status }}</div>
+            </div>
+        </div>
+
+        <!-- 에어컨 수동 제어 패널 -->
+        <div class="ac-control">
+            <h2>에어컨 수동 제어</h2>
+            <button class="ac-btn" onclick="controlAircon('on')">에어컨 켜기</button>
+            <button class="ac-btn" onclick="controlAircon('off')">에어컨 끄기</button>
+        </div>
+    </div>
+
+    <!-- 자동 제어 상태 표시 -->
+    <div class="auto-control-status" id="auto-control-status">
+        자동 제어: 로딩 중...
+    </div>
+
+    <!-- 자동 제어 설정 패널 -->
+    <div class="auto-control-panel">
+        <h2>🤖 자동 제어 설정</h2>
+        
+        <div class="setting-group">
+            <h3>자동 제어 설정</h3>
+            <div class="setting-row">
+                <label>자동 제어 사용:</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="auto-control-enabled">
+                    <span class="slider"></span>
+                </div>
+            </div>
+            <div class="setting-row">
+                <label>에어컨 켜는 온도:</label>
+                <input type="number" id="target-temp-max" min="15" max="35" step="0.5" value="28">
+                <span>°C 이상</span>
+            </div>
+            <div class="setting-row">
+                <label>에어컨 켜는 습도:</label>
+                <input type="number" id="target-humidity-max" min="30" max="90" step="1" value="60">
+                <span>% 이상</span>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.9rem; color: #666;">
+                💡 온도 <strong>또는</strong> 습도 중 하나라도 기준을 넘으면 에어컨이 켜집니다.
+            </div>
+        </div>
+
+        <button class="save-btn" onclick="saveSettings()">설정 저장</button>
+        
+        <button class="manual-trigger-btn" onclick="triggerAutoControl()">지금 자동 제어 실행</button>
+    </div>
+
+    <script>
+    // 페이지 로드 시 설정 불러오기
+    window.onload = function() {
+        updateStatus();
+        loadSettings();
+    };
+
+    function controlAircon(action) {
+        fetch('/control/remote_aircon_control/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=' + action
+        })
+        .then(r => r.json())
+        .then(data => {
+            updateStatus();
+        })
+        .catch(error => {
+            console.log("네트워크 오류 또는 서버 에러가 발생했습니다.");
+            console.log(error);
+        });
+    }
+
+    function updateStatus() {
+        fetch('/latest_airconlog/')
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('current-temp').textContent = data.temperature + '°C';
+            document.getElementById('current-humidity').textContent = data.humidity + '%';
+            document.getElementById('ac-status').textContent = data.ac_status;
+        });
+    }
+
+    function loadSettings() {
+        fetch('/get_user_settings/')
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('auto-control-enabled').checked = data.auto_control_enabled;
+            document.getElementById('target-temp-max').value = data.target_temp_max;
+            document.getElementById('target-humidity-max').value = data.target_humidity_max;
+            
+            updateAutoControlStatus(data.auto_control_enabled);
+        })
+        .catch(error => {
+            console.error('설정 로드 실패:', error);
+        });
+    }
+
+    function saveSettings() {
+        const formData = new FormData();
+        formData.append('auto_control_enabled', document.getElementById('auto-control-enabled').checked);
+        formData.append('target_temp_max', document.getElementById('target-temp-max').value);
+        formData.append('target_humidity_max', document.getElementById('target-humidity-max').value);
+
+        fetch('/update_user_settings/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('✅ ' + data.message);
+                updateAutoControlStatus(document.getElementById('auto-control-enabled').checked);
+            } else {
+                alert('❌ ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('❌ 설정 저장 중 오류가 발생했습니다.');
+            console.error(error);
+        });
+    }
+
+    function triggerAutoControl() {
+        fetch('/manual_auto_control/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        .then(r => r.json())
+        .then(data => {
+            let message = data.message;
+            if (data.current_temp !== undefined) {
+                message += `\n현재 온도: ${data.current_temp}°C, 습도: ${data.current_humidity}%`;
+            }
+            alert(message);
+            updateStatus(); // 상태 업데이트
+        })
+        .catch(error => {
+            alert('자동 제어 실행 중 오류가 발생했습니다.');
+            console.error(error);
+        });
+    }
+
+    function updateAutoControlStatus(enabled) {
+        const statusDiv = document.getElementById('auto-control-status');
+        if (enabled) {
+            statusDiv.className = 'auto-control-status enabled';
+            statusDiv.textContent = '🟢 자동 제어가 활성화되어 있습니다.';
+        } else {
+            statusDiv.className = 'auto-control-status disabled';
+            statusDiv.textContent = '🔴 자동 제어가 비활성화되어 있습니다.';
+        }
+    }
+
+    // 5초마다 상태 업데이트
+    setInterval(updateStatus, 5000);
+    
+    // 자동 제어가 활성화되어 있으면 30초마다 자동 제어 실행
+    setInterval(function() {
+        const autoControlEnabled = document.getElementById('auto-control-enabled').checked;
+        if (autoControlEnabled) {
+            // 조용히 자동 제어 실행 (알림 없이)
+            fetch('/manual_auto_control/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('자동 제어 실행:', data.message);
+                    updateStatus(); // 상태 업데이트
+                }
+            })
+            .catch(error => {
+                console.error('자동 제어 실행 중 오류:', error);
+            });
+        }
+    }, 5000); // 30초마다 실행
+    
+    // 토글 스위치 디버깅 + 클릭 이벤트 추가
+    const toggleSwitch = document.getElementById('auto-control-enabled');
+    const slider = document.querySelector('.slider');
+    
+    // input 요소 클릭 이벤트
+    toggleSwitch.addEventListener('change', function() {
+        console.log('토글 상태:', this.checked);
+    });
+    
+    // slider 클릭 이벤트 추가 (백업용)
+    slider.addEventListener('click', function() {
+        console.log('슬라이더 클릭됨');
+        toggleSwitch.checked = !toggleSwitch.checked;
+        toggleSwitch.dispatchEvent(new Event('change'));
+    });
+    
+    // 클릭 디버깅
+    toggleSwitch.addEventListener('click', function() {
+        console.log('input 클릭됨');
+    });
+    </script>
 </body>
 </html>

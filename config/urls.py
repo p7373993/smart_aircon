@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))u
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from sensor import views
 urlpatterns = [
     path('', views.home, name='home'),  # 루트 URL 추가
@@ -26,4 +26,11 @@ urlpatterns = [
     path('collect/', views.collect_data, name='collect_data'),
     path('airconlog/', views.airconlog_list, name='airconlog_list'),
     path('airconlog_chart/', views.airconlog_chart, name='airconlog_chart'),
+    path('latest_airconlog/', views.latest_airconlog, name='latest_airconlog'),
+    path('aircon_usage_chart/', views.aircon_usage_chart, name='aircon_usage_chart'),
+    path('get_user_settings/', views.get_user_settings, name='get_user_settings'),
+    path('update_user_settings/', views.update_user_settings, name='update_user_settings'), 
+    path('manual_auto_control/', views.manual_auto_control, name='manual_auto_control'),
+
+    path('control/', include('control.urls'))  # control 앱의 URL 포함
 ]
