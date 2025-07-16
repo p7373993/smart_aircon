@@ -309,7 +309,7 @@ def aircon_usage_chart(request):
         ax.grid(True, axis='y', linestyle='--', alpha=0.7, color='#dee2e6')
         ax.set_axisbelow(True)
         
-        # 제목과 레이블 (이모지 제거)
+        # 제목과 레이블 
         ax.set_title('Daily AC Usage Analysis (30min intervals)', fontsize=20, 
                     fontweight='bold', color='#343a40', pad=25)
         ax.set_xlabel('Time Period', fontsize=14, fontweight='bold', color='#495057')

@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.urls import include, path
 from sensor import views
 urlpatterns = [
-    path('', views.home, name='home'),  # 루트 URL 추가
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('collect_power/', views.collect_power_data, name='collect_power_data'),
-    path('power_usage/', views.power_usage_list, name='power_usage_list'),   # 리스트
-    path('power_chart/', views.power_usage_chart, name='power_usage_chart'), # 그래프
+    path('power_usage/', views.power_usage_list, name='power_usage_list'),  
+    path('power_chart/', views.power_usage_chart, name='power_usage_chart'),
     path('collect/', views.collect_data, name='collect_data'),
     path('airconlog/', views.airconlog_list, name='airconlog_list'),
     path('airconlog_chart/', views.airconlog_chart, name='airconlog_chart'),
@@ -32,5 +32,5 @@ urlpatterns = [
     path('update_user_settings/', views.update_user_settings, name='update_user_settings'), 
     path('manual_auto_control/', views.manual_auto_control, name='manual_auto_control'),
 
-    path('control/', include('control.urls'))  # control 앱의 URL 포함
+    path('control/', include('control.urls'))  
 ]
